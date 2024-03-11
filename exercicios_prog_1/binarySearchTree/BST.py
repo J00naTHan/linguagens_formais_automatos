@@ -9,6 +9,12 @@ class BST:
     self.depth = 0
     del self.root.parent
 
+  def inorder(self):
+    root = self.root
+    if root is not None:
+      inorder(root.left)
+      inorder(root.right)
+
   def search(self, key):
     node = self.root
     while node is not None and node.key != key:
@@ -48,4 +54,41 @@ class BST:
       return None
 
   def delete(self, key):
-    pass
+    root = self.root
+
+    if root is None:
+      return root
+
+    if root.key > key:
+      root.left = delete(root.left, key)
+      return root
+    elif root.key < key:
+      root.right = delete(root.right, key)
+      return root
+
+    if root.left is None:
+      temp = root.right
+      del root
+      return temp
+    elif root.right is None:
+      temp = root.left
+      del root
+      return temp
+
+    else:
+      parent = root
+
+      successor = root.right
+      while successor.left is not None:
+        parent = successor
+        successor = successor.left
+
+      if successor.parent != root:
+        parent.left = successor.right
+      else:
+        parent.right = successor.right
+  
+      root.key = successor.key
+
+      del successor
+      return root
